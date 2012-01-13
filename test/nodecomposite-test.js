@@ -1,10 +1,10 @@
-suite("NodeSet", function () {
+suite("NodeComposite", function () {
     var nodes = "<div class='foo'></div> \
                  <div class='foo'></div> \
                  <div class='foo'></div>";
 
     var testBody = document.getElementById("testbody"),
-        $ = NodeSet.$;
+        $ = NodeComposite.$;
 
     setup(function () {
         var fragment = Fragment(nodes);
@@ -50,7 +50,7 @@ suite("NodeSet", function () {
     });
 
     suite("Array", function () {
-        test("nodeset can be an array", function () {
+        test("NodeComposite can be an array", function () {
             var foos = $(".foo");
             assert(foos.length, "does not have length");
             assert(foos.forEach, "does not have forEach");
