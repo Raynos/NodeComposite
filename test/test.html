@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>NodeSet Tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://raw.github.com/visionmedia/mocha/master/mocha.css" />
+    <script src="mocha.js"></script>
+    <script>mocha.setup('tdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="../vendor/nodeset.js"></script>
+    <script>
+      onload = mocha.run;
+    </script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <div id="testbody"></div>
+    <script src="nodeset-test.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "nodeset",
+    "version": "0.1.0",
+    "description": "NodeSet operations for DOM nodes",
+    "author": "Raynos <raynos2@gmail.com>",
+    "main": "vendor/nodeset.js",
+    "dependencies": {},
+    "devDependencies": {
+        "modul8": "0.15.0"
+    },
+    "scripts": {
+        "test": "make test"
+    }
+}
