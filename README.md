@@ -20,3 +20,7 @@ Allowing you to operate on nodeLists as if they are a single node.
     }, 0);
     // map the set of all foos to the set of .bar's in foo
     var bars = foos.getElementsByClassName('bar');
+    // add an event listener to all elements of foo
+    foos.addEventListener('click', function () {
+        ...
+    });
