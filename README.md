@@ -1,10 +1,11 @@
-# NodeSet
+# NodeComposite
 
 Allowing you to operate on nodeLists as if they are a single node.
 
 ## Example
 
-    var $ = NodeSet.$;
+    // $ is QSA _not_ Sizzle/jQuery
+    var $ = NodeComposite.$;
 
     var foos = $(".foo");
 
