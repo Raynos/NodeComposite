@@ -379,14 +379,16 @@ var ClassList = {
 module.exports = ClassList;
     
 function addToClassList(name) {
-    ClassList[name] = function proxy() {
+    ClassList[name] = proxy;
+
+    function proxy() {
         var args = arguments;
         this.classLists.forEach(applyMethod);
    
         function applyMethod(classList) {
             classList[name].apply(classList, args);
         } 
-    };
+    }
 }
 });
 M8.define('style','app',function (require, module, exports) {
