@@ -58,6 +58,29 @@ suite("NodeComposite", function () {
         });
     });
 
+    suite("parentElement", function () {
+        test("parentElement is as expected", function () {
+            var foos = $(".foo");
+            var parents = foos.parentElement;
+            parents.forEach(checkIfTestbody);
+
+            function checkIfTestbody(el) {
+                assert(el === testBody, "is not testBody");
+            }
+        });
+    });
+
+    suite("getElementsByClassName", function () {
+        test("test can get elements", function () {
+            var foos = $(".foo");
+            foos.forEach(function (el) {
+                el.appendChild(Fragment("<div class='baz'></div>"));
+            });
+            var bazs = foos.getElementsByClassName("baz");
+            assert(bazs.length === 3, "not enough bazs");
+        });
+    })
+
     function Fragment(html) {
         var div = document.createElement("div"),
             fragment = document.createDocumentFragment();

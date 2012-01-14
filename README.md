@@ -7,6 +7,7 @@ Allowing you to operate on nodeLists as if they are a single node.
     // $ is QSA _not_ Sizzle/jQuery
     var $ = NodeComposite.$;
 
+    // foos is a NodeComposite instance and also an Array
     var foos = $(".foo");
 
     // set style on all foos
@@ -25,3 +26,11 @@ Allowing you to operate on nodeLists as if they are a single node.
     foos.addEventListener('click', function () {
         ...
     });
+
+## Build file
+
+`sudo npm link && node build.js`
+
+## run tests
+
+open test/test.html in browser (Chrome tested only)
