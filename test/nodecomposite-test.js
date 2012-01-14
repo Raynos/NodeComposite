@@ -37,6 +37,15 @@ suite("NodeComposite", function () {
             assert($(".bar").length === 0,
                 "too many bar nodes"); 
         });
+
+        test("classList contains works", function () {
+            var foos = $(".foo");
+
+            foos[1].classList.add("bar");
+            console.dir(foos.classList.contains("bar"));
+            assert(foos.classList.contains("bar") === true,
+                "foos does not contain bar");
+        });
     });
 
     suite("style", function () {
