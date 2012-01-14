@@ -354,19 +354,6 @@ ns.external = function (name, exported) {
 
 
 (function(){
-M8.define('by','app',function (require, module, exports) {
-module.exports = {
-    id: function id(id) {
-        return document.getElementById(id); 
-    },
-    "class": function klass(klass, context) {
-        return (context || document).getElementsByClassName(klass);
-    },
-    tag: function tag(tag, context) {
-        return (context || tag).getElementsByTagName(tag);    
-    }
-};
-});
 M8.define('classlist','app',function (require, module, exports) {
 var ClassList = {
     constructor: function constructor(nodes) {
@@ -421,11 +408,10 @@ function addToStyle(name) {
 }
 });
 M8.define('index','app',function (require, module, exports) {
-var By = require("./by.js"),
-    ClassList = require("./classlist.js"),
+var ClassList = require("./classlist.js"),
     Style = require("./style.js");
 
-var isSimple = /^\w+$/,
+var isSimple = /^[#.]?\w+$/,
     toArray = [].slice.call.bind([].slice);
 /*  set {
         classList: manipulates classes in every element in the set
