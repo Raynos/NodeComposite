@@ -9,6 +9,10 @@ Allowing you to operate on nodeLists as if they are a single node.
 
     // foos is a NodeComposite instance and also an Array
     var foos = $(".foo");
+    // Note you can pass any NodeList to NodeComposite as well
+    // var foos = Object.create(NodeComposite).constructor(
+    //     document.getElementsByClassName('foo')
+    // );
 
     // set style on all foos
     foos.style.color = 'red';
