@@ -33,8 +33,8 @@ Allowing you to operate on nodeLists as if they are a single node.
 
 ## Build file
 
-`sudo npm link && node build.js`
+`make build`
 
 ## run tests
 
-open test/test.html in browser (Chrome tested only)
+`make test`

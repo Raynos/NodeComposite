@@ -476,18 +476,7 @@ Object.defineProperties(NodeComposite, {
 window.NodeComposite = module.exports = NodeComposite;
 
 function $(selector) {
-    var substr = selector.substring(1),
-        set = Object.create(NodeComposite);
-
-    if (!isSimple.test(substr)) {
-        return set.constructor(document.querySelectorAll(selector));
-    } else if (selector[0] === "#") {
-        return set.constructor(document.getElementById(substr));
-    } else if (selector[0] === ".") {
-        return set.constructor(document.getElementsByClassName(substr));    
-    } else {
-        return set.constructor(document.getElementsByTagName(selector));    
-    }
+    return Object.create(NodeComposite).add(document.querySelectorAll(selector));
 }
 
 function add() {
@@ -496,8 +485,7 @@ function add() {
         if (val.length !== undefined) {
             this.push.apply(this, toArray(val));
         } else if (val !== null) {
-            console.log("pushing", val)
-            this.push.call(this, val);       
+            this.push(val);       
         }
     }
     return this;
@@ -532,11 +520,11 @@ function addReturningOperationToNodeComposite(name) {
 function addOperationToNodeComposite(name) {
     NodeComposite[name] = operateOnNodeComposite;
 
-    function operateOnNodeComposite(name) {
+    function operateOnNodeComposite() {
         var args = arguments;
         this.forEach(doOperation);
 
-        function normalizeNode(el) {
+        function doOperation(el) {
             el[name].apply(el, args);
         }
     }

@@ -2,7 +2,7 @@
   <head>
     <title>NodeSet Tests</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="https://raw.github.com/visionmedia/mocha/master/mocha.css" />
+    <link rel="stylesheet" href="mocha.css" />
     <script src="mocha.js"></script>
     <script>mocha.setup('tdd')</script>
     <script>
@@ -12,7 +12,10 @@
     </script>
     <script src="../vendor/nodecomposite.js"></script>
     <script>
-      onload = mocha.run;
+      onload = function () {
+        runner = mocha.run()
+          .globals(["runner", "onerror", "location"]);
+      }
     </script>
   </head>
   <body>

@@ -56,12 +56,23 @@ suite("NodeComposite", function () {
             assert(foos.forEach, "does not have forEach");
             assert(foos.map, "does not have map");
         });
+
+        test("reduce works", function () {
+            var foos = $(".foo");
+            foos.forEach(function (el, i) {
+                el.value = i;
+            });
+            var sum = foos.reduce(function (memo, el) {
+                return memo + el.value;
+            }, 0);
+            assert(sum === 3, "sum is incorrect");
+        })
     });
 
     suite("parentElement", function () {
-        test("parentElement is as expected", function () {
+        test("parentNode is as expected", function () {
             var foos = $(".foo");
-            var parents = foos.parentElement;
+            var parents = foos.parentNode;
             parents.forEach(checkIfTestbody);
 
             function checkIfTestbody(el) {
@@ -79,7 +90,23 @@ suite("NodeComposite", function () {
             var bazs = foos.getElementsByClassName("baz");
             assert(bazs.length === 3, "not enough bazs");
         });
-    })
+    });
+
+    suite("addEventListener", function () {
+        test("test events fire", function () {
+            var foos = $(".foo"),
+                count = 0;
+            foos.addEventListener("click", function () {
+                count++;
+            });
+            foos.forEach(function (el) {
+                var ev = document.createEvent("Event");
+                ev.initEvent("click", true, true);
+                el.dispatchEvent(ev);
+            });
+            assert(count === 3, "event handlers do not work");
+        });
+    });
 
     function Fragment(html) {
         var div = document.createElement("div"),
