@@ -22,7 +22,7 @@ Allowing you to operate on nodeLists as if they are a single node.
     // set classes on all foos
     foos.classList.add('bar');
 
-    // map the set of all foo elements to the set of all their parents
+    // create a new composite consisting of the parentNodes
     var parents = foos.parentNode;
 
     // manipulate foos like an array
