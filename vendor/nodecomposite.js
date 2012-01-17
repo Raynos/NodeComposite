@@ -437,6 +437,7 @@ var NodeComposite = Object.create(Array.prototype);
 NodeComposite.$ = $;
 NodeComposite.add = add;
 NodeComposite.constructor = add;
+NodeComposite.make = make;
 
 Object.defineProperties(NodeComposite, {
     classList: {

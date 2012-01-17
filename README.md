@@ -127,6 +127,13 @@ For example `comp.appendChild(otherComp)` would append each ith node of otherCom
 
 NodeComposite inherits from Array.
 
+### make(nodes)
+
+Utility for making a new NodeComposite
+
+    // var things = Object.create(NodeComposite).add(nodes);
+    var things = NodeComposite.make(nodes);
+
 ## Installation
 
 Copy vendor/nodecomposite.js
