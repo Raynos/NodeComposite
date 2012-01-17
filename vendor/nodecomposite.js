@@ -489,6 +489,14 @@ Object.defineProperties(NodeComposite, {
     "insertBefore"
 ].forEach(addBatchOperationToNodeComposite);
 
+[
+    "concat",
+    "slice",
+    "join",
+    "filter",
+    "map"
+].forEach(addArrayMethodToNodeComposite);
+
 module.exports = NodeComposite;
 
 function $(selector) {
@@ -510,7 +518,7 @@ function add() {
 function addGetterToNodeComposite(name) {
     Object.defineProperty(NodeComposite, name, {
         get: function getName() {
-            return Object.create(NodeComposite).constructor(this.map(toName));
+            return this.map(toName);
 
             function toName(el) {
                 return el[name];
@@ -550,12 +558,30 @@ function addBatchOperationToNodeComposite(name) {
     NodeComposite[name] = batchOperateOnNodeComposite;
 
     function batchOperateOnNodeComposite(node, child) {
+        var args = [].slice.call(arguments);
         this.forEach(batchOperate);
         return child || node;
 
-        function batchOperate(el, index) {
-            el[name].call(el, node[index], child && child[index]);
+        function batchOperate(element, index) {
+            element[name].apply(element, args.map(getIndex(index)));
         }
+    }
+
+    function getIndex(index) {
+        return getIndex;
+
+        function getIndex(element) {
+            return element[index];
+        }
+    }
+}
+
+function addArrayMethodToNodeComposite(name) {
+    NodeComposite[name] = arrayMethod;
+
+    function arrayMethod() {
+        var arr = Array.prototype[name].apply(this, arguments);
+        return Object.create(NodeComposite).constructor(arr);
     }
 }
 });

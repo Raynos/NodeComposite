@@ -122,6 +122,8 @@ suite("NodeComposite", function () {
             var foos = $(".foo"),
                 parents = foos.parentNode;
 
+            console.log("removeChild", foos, parents);
+
             parents.removeChild(foos);
             assert($(".foo").length === 0,
                 "foos are still in document");
