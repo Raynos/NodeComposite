@@ -117,6 +117,20 @@ suite("NodeComposite", function () {
         });
     });
 
+    suite("composite", function () {
+        test("test removeChild", function () {
+            var foos = $(".foo"),
+                parents = foos.parentNode;
+
+            parents.removeChild(foos);
+            assert($(".foo").length === 0,
+                "foos are still in document");
+            parents.appendChild(foos);
+            assert($(".foo").length === 3,
+                "foos are not in document");
+        });
+    });
+
     function Fragment(html) {
         var div = document.createElement("div"),
             fragment = document.createDocumentFragment();
