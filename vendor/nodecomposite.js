@@ -479,6 +479,7 @@ Object.defineProperties(NodeComposite, {
 
 [
     "addEventListener",
+    "removeEventListener",
     "normalize"
 ].forEach(addOperationToNodeComposite);
 
@@ -489,25 +490,21 @@ Object.defineProperties(NodeComposite, {
     "insertBefore"
 ].forEach(addBatchOperationToNodeComposite);
 
-[
-    "concat",
-    "slice",
-    "join",
-    "filter",
-    "map"
-].forEach(addArrayMethodToNodeComposite);
-
 module.exports = NodeComposite;
 
+function make(nodes) {
+    return Object.create(NodeComposite).add(nodes);
+}
+
 function $(selector) {
-    return Object.create(NodeComposite).add(document.querySelectorAll(selector));
+    return make(document.querySelectorAll(selector));
 }
 
 function add() {
     for (var i = 0, len = arguments.length; i < len; i++) {
         var val = arguments[i];
         if (val.length !== undefined) {
-            this.push.apply(this, toArray(val));
+            this.add.apply(this, toArray(val));
         } else if (val !== null) {
             this.push(val);       
         }
@@ -518,7 +515,7 @@ function add() {
 function addGetterToNodeComposite(name) {
     Object.defineProperty(NodeComposite, name, {
         get: function getName() {
-            return this.map(toName);
+            return make(this.map(toName));
 
             function toName(el) {
                 return el[name];
@@ -533,7 +530,7 @@ function addReturningOperationToNodeComposite(name) {
 
     function operateOnNodeComposite() {
         var args = arguments;
-        return this.map(byOperation);
+        return make(this.map(byOperation));
 
         function byOperation(el) {
             return el[name].apply(el, args);

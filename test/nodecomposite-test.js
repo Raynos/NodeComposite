@@ -87,6 +87,10 @@ suite("NodeComposite", function () {
             function checkIfTestbody(el) {
                 assert(el === testBody, "is not testBody");
             }
+
+            var children = parents.children;
+            assert(children.length ===  9,
+                "children length not correct");
         });
     });
 
@@ -121,8 +125,6 @@ suite("NodeComposite", function () {
         test("test removeChild", function () {
             var foos = $(".foo"),
                 parents = foos.parentNode;
-
-            console.log("removeChild", foos, parents);
 
             parents.removeChild(foos);
             assert($(".foo").length === 0,
