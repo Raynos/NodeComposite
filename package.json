@@ -6,7 +6,8 @@
     "main": "lib/nodecomposite",
     "dependencies": {},
     "devDependencies": {
-        "modul8": "0.15.0"
+        "modul8": "0.15.0",
+        "webmake": "0.3.7"
     },
     "scripts": {
         "test": "make test"

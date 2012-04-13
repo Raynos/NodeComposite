@@ -45,238 +45,255 @@
 })
 ({
 	".": {
-		".": {
-			"lib": {
-				"index": function (exports, module, require) {
-					window.NodeComposite = require("./nodecomposite.js");				},
-				"nodecomposite": function (exports, module, require) {
-					var ClassList = require("./classlist.js"),
-					    Style = require("./style.js");
+		"lib": {
+			"index": function (exports, module, require) {
+				window.NodeComposite = require("./nodecomposite.js");			},
+			"nodecomposite": function (exports, module, require) {
+				var ClassList = require("./classlist.js"),
+				    Style = require("./style.js");
 
-					var isSimple = /^[#.]?\w+$/,
-					    toArray = [].slice.call.bind([].slice);
-					/*  set {
-					        classList: manipulates classes in every element in the set
-					        style: manipulate the CSS style of every element in the set
-					        parentNode, parentElement, previousSibling, etc: all return new sets of the collective operation
-					        normalize: normalizes all elements
-					        cloneNode: returns a set of clones of all elements
-					        getElementsByX, querySelector, querySelectorAll: returns a new set of the result applied to all nodes
-					        forEach, map, filter, reduce, etc: run the array methods on the nodes property
-					    }
-					*/
-					var NodeComposite = Object.create(Array.prototype);
+				var toArray = [].slice.call.bind([].slice);
+				/*  set {
+				        classList: manipulates classes in every element in the set
+				        style: manipulate the CSS style of every element in the set
+				        parentNode, parentElement, previousSibling, etc: all return new sets of the collective operation
+				        normalize: normalizes all elements
+				        cloneNode: returns a set of clones of all elements
+				        getElementsByX, querySelector, querySelectorAll: returns a new set of the result applied to all nodes
+				        forEach, map, filter, reduce, etc: run the array methods on the nodes property
+				    }
+				*/
+				var NodeComposite = Object.create(Array.prototype);
 
-					NodeComposite.$ = $;
-					NodeComposite.add = add;
-					NodeComposite.constructor = add;
-					NodeComposite.make = make;
+				NodeComposite.$ = $;
+				NodeComposite.By = {
+				    id: function byId(id) {
+				        return make(document.getElementById(id));
+				    },
+				    tag: function byTag(tag, context) {
+				        return make((context || document).getElementsByTagName(tag));
+				    },
+				    "class": function byClass(klass, context) {
+				        return make((context || document).getElementsByClassName(klass));
+				    },
+				    name: function byName(name) {
+				        return make(document.getElementsByName(name));
+				    },
+				    qsa: function byQuery(query, context) {
+				        return make((context || document).querySelectorAll(query));
+				    },
+				    qs: function byQueryOne(query, context) {
+				        return make((context || document).querySelector(query));
+				    }
+				};
+				NodeComposite.add = add;
+				NodeComposite.constructor = add;
+				NodeComposite.make = make;
 
-					Object.defineProperties(NodeComposite, {
-					    classList: {
-					        get: function getClassList() {
-					            return Object.create(ClassList).constructor(this);
-					        },
-					        configurable: true
-					    },
-					    style: {
-					        get: function getStyle() {
-					            return Object.create(Style).constructor(this);
-					        },
-					        configurable: true
-					    }
-					});
+				Object.defineProperties(NodeComposite, {
+				    classList: {
+				        get: function getClassList() {
+				            return Object.create(ClassList).constructor(this);
+				        },
+				        configurable: true
+				    },
+				    style: {
+				        get: function getStyle() {
+				            return Object.create(Style).constructor(this);
+				        },
+				        configurable: true
+				    }
+				});
 
-					[
-					    "parentElement", 
-					    "parentNode",
-					    "childNodes",
-					    "firstChild",
-					    "lastChild",
-					    "previousSibling",
-					    "nextSibling",
-					    "children",
-					    "firstElementChild",
-					    "lastElementChild",
-					    "previousElementSibling",
-					    "nextElementSibling"
-					].forEach(addGetterToNodeComposite);
+				[
+				    "parentElement", 
+				    "parentNode",
+				    "childNodes",
+				    "firstChild",
+				    "lastChild",
+				    "previousSibling",
+				    "nextSibling",
+				    "children",
+				    "firstElementChild",
+				    "lastElementChild",
+				    "previousElementSibling",
+				    "nextElementSibling"
+				].forEach(addGetterToNodeComposite);
 
-					[
-					    "cloneNode",
-					    "getElementsByTagName",
-					    "getElementsByTagNameNS",
-					    "getElementsByClassName",
-					    "querySelector",
-					    "querySelectorAll"
-					].forEach(addReturningOperationToNodeComposite);
+				[
+				    "cloneNode",
+				    "getElementsByTagName",
+				    "getElementsByTagNameNS",
+				    "getElementsByClassName",
+				    "querySelector",
+				    "querySelectorAll"
+				].forEach(addReturningOperationToNodeComposite);
 
-					[
-					    "addEventListener",
-					    "removeEventListener",
-					    "normalize"
-					].forEach(addOperationToNodeComposite);
+				[
+				    "addEventListener",
+				    "removeEventListener",
+				    "normalize"
+				].forEach(addOperationToNodeComposite);
 
-					[
-					    "appendChild",
-					    "replaceChild",
-					    "removeChild",
-					    "insertBefore"
-					].forEach(addBatchOperationToNodeComposite);
+				[
+				    "appendChild",
+				    "replaceChild",
+				    "removeChild",
+				    "insertBefore"
+				].forEach(addBatchOperationToNodeComposite);
 
-					module.exports = NodeComposite;
+				module.exports = NodeComposite;
 
-					function make(nodes) {
-					    return Object.create(NodeComposite).add(nodes);
-					}
+				function make(nodes) {
+				    return Object.create(NodeComposite).add(nodes);
+				}
 
-					function $(selector) {
-					    return make(document.querySelectorAll(selector));
-					}
+				function $(selector) {
+				    return make(document.querySelectorAll(selector));
+				}
 
-					function add() {
-					    for (var i = 0, len = arguments.length; i < len; i++) {
-					        var val = arguments[i];
-					        if (val.length !== undefined) {
-					            this.add.apply(this, toArray(val));
-					        } else if (val !== null) {
-					            this.push(val);       
-					        }
-					    }
-					    return this;
-					}
+				function add() {
+				    for (var i = 0, len = arguments.length; i < len; i++) {
+				        var val = arguments[i];
+				        if (val.length !== undefined) {
+				            this.add.apply(this, toArray(val));
+				        } else if (val !== null) {
+				            this.push(val);       
+				        }
+				    }
+				    return this;
+				}
 
-					function addGetterToNodeComposite(name) {
-					    Object.defineProperty(NodeComposite, name, {
-					        get: function getName() {
-					            return make(this.map(toName));
+				function addGetterToNodeComposite(name) {
+				    Object.defineProperty(NodeComposite, name, {
+				        get: function getName() {
+				            return make(this.map(toName));
 
-					            function toName(el) {
-					                return el[name];
-					            }
-					        },
-					        configurable: true
-					    });
-					}
+				            function toName(el) {
+				                return el[name];
+				            }
+				        },
+				        configurable: true
+				    });
+				}
 
-					function addReturningOperationToNodeComposite(name) {
-					    NodeComposite[name] = operateOnNodeComposite;
+				function addReturningOperationToNodeComposite(name) {
+				    NodeComposite[name] = operateOnNodeComposite;
 
-					    function operateOnNodeComposite() {
-					        var args = arguments;
-					        return make(this.map(byOperation));
+				    function operateOnNodeComposite() {
+				        var args = arguments;
+				        return make(this.map(byOperation));
 
-					        function byOperation(el) {
-					            return el[name].apply(el, args);
-					        }
-					    }
-					}
+				        function byOperation(el) {
+				            return el[name].apply(el, args);
+				        }
+				    }
+				}
 
-					function addOperationToNodeComposite(name) {
-					    NodeComposite[name] = operateOnNodeComposite;
+				function addOperationToNodeComposite(name) {
+				    NodeComposite[name] = operateOnNodeComposite;
 
-					    function operateOnNodeComposite() {
-					        var args = arguments;
-					        this.forEach(doOperation);
+				    function operateOnNodeComposite() {
+				        var args = arguments;
+				        this.forEach(doOperation);
 
-					        function doOperation(el) {
-					            el[name].apply(el, args);
-					        }
-					    }
-					}
+				        function doOperation(el) {
+				            el[name].apply(el, args);
+				        }
+				    }
+				}
 
-					function addBatchOperationToNodeComposite(name) {
-					    NodeComposite[name] = batchOperateOnNodeComposite;
+				function addBatchOperationToNodeComposite(name) {
+				    NodeComposite[name] = batchOperateOnNodeComposite;
 
-					    function batchOperateOnNodeComposite(node, child) {
-					        var args = [].slice.call(arguments);
-					        this.forEach(batchOperate);
-					        return child || node;
+				    function batchOperateOnNodeComposite(node, child) {
+				        var args = [].slice.call(arguments);
+				        this.forEach(batchOperate);
+				        return child || node;
 
-					        function batchOperate(element, index) {
-					            element[name].apply(element, args.map(getIndex(index)));
-					        }
-					    }
+				        function batchOperate(element, index) {
+				            element[name].apply(element, args.map(getIndex(index)));
+				        }
+				    }
 
-					    function getIndex(index) {
-					        return getIndex;
+				    function getIndex(index) {
+				        return getIndex;
 
-					        function getIndex(element) {
-					            return element[index];
-					        }
-					    }
-					}
+				        function getIndex(element) {
+				            return element[index];
+				        }
+				    }
+				}
 
-					function addArrayMethodToNodeComposite(name) {
-					    NodeComposite[name] = arrayMethod;
+				function addArrayMethodToNodeComposite(name) {
+				    NodeComposite[name] = arrayMethod;
 
-					    function arrayMethod() {
-					        var arr = Array.prototype[name].apply(this, arguments);
-					        return Object.create(NodeComposite).constructor(arr);
-					    }
-					}				},
-				"classlist": function (exports, module, require) {
-					var ClassList = {
-					    constructor: function constructor(nodes) {
-					        this.classLists = nodes.map(toClassList);
-					        return this;
-					        
-					        function toClassList(element) {
-					            return element.classList;
-					        }
-					    },
-					    contains: function contains() {
-					        var args = arguments;
-					        return this.classLists.some(containsClass);
+				    function arrayMethod() {
+				        var arr = Array.prototype[name].apply(this, arguments);
+				        return Object.create(NodeComposite).constructor(arr);
+				    }
+				}			},
+			"classlist": function (exports, module, require) {
+				var ClassList = {
+				    constructor: function constructor(nodes) {
+				        this.classLists = nodes.map(toClassList);
+				        return this;
+				        
+				        function toClassList(element) {
+				            return element.classList;
+				        }
+				    },
+				    contains: function contains() {
+				        var args = arguments;
+				        return this.classLists.some(containsClass);
 
-					        function containsClass(classList) {
-					            return classList.contains.apply(classList, args);
-					        }
-					    }
-					};
-					    
-					["add", "remove", "toggle"].forEach(addToClassList);
+				        function containsClass(classList) {
+				            return classList.contains.apply(classList, args);
+				        }
+				    }
+				};
+				    
+				["add", "remove", "toggle"].forEach(addToClassList);
 
-					module.exports = ClassList;
-					    
-					function addToClassList(name) {
-					    ClassList[name] = proxy;
+				module.exports = ClassList;
+				    
+				function addToClassList(name) {
+				    ClassList[name] = proxy;
 
-					    function proxy() {
-					        var args = arguments;
-					        this.classLists.forEach(applyMethod);
-					   
-					        function applyMethod(classList) {
-					            classList[name].apply(classList, args);
-					        } 
-					    }
-					}				},
-				"style": function (exports, module, require) {
-					var Style = {
-					    constructor: function constructor(nodes) {
-					        this.nodes = nodes;
-					        return this;
-					    }
-					};
+				    function proxy() {
+				        var args = arguments;
+				        this.classLists.forEach(applyMethod);
+				   
+				        function applyMethod(classList) {
+				            classList[name].apply(classList, args);
+				        } 
+				    }
+				}			},
+			"style": function (exports, module, require) {
+				var Style = {
+				    constructor: function constructor(nodes) {
+				        this.nodes = nodes;
+				        return this;
+				    }
+				};
 
-					[].slice.call(window.getComputedStyle(document.head)).forEach(addToStyle);
+				[].slice.call(window.getComputedStyle(document.head)).forEach(addToStyle);
 
-					module.exports = Style;
-					    
-					function addToStyle(name) {
-					    Object.defineProperty(Style, name, {
-					        configurable: true,
-					        set: function set(value) {
-					            this.nodes.forEach(setValue);
-					     
-					            function setValue(node) {
-					                node.style[name] = value;   
-					            }
-					        }
-					    });
-					}				}
-			}
+				module.exports = Style;
+				    
+				function addToStyle(name) {
+				    Object.defineProperty(Style, name, {
+				        configurable: true,
+				        set: function set(value) {
+				            this.nodes.forEach(setValue);
+				     
+				            function setValue(node) {
+				                node.style[name] = value;   
+				            }
+				        }
+				    });
+				}			}
 		}
 	}
 })
-("././lib/index");
+("./lib/index");
